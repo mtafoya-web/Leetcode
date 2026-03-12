@@ -72,3 +72,33 @@ class Solution(object):
         return count
 
 ##### Complement + hashmap or set #####
+This algorithm uses a hashmap to check to store seen values
+It also, uses the complement of the the target - current number
+If the complement exists in the hashmap with increment the counter
+If it does not, we add it to the hashmap
+The value of the hashmap stores how many times we have seen the number
+If the number has been seen more than 0 we consider that a valid counter
+Otherwise we increment the value or add the number to seen. This is The
+most optimal version of the algorithm using only O(n) time lookup in the
+hashmap is O(1)
+class Solution(object):
+    def maxOperations(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        seen = dict()
+        count = 0
+        for num in nums:
+            compl = k - num
+            if compl in seen and seen[compl] > 0:
+                count += 1
+                seen[compl] -= 1
+            elif num not in seen:
+                seen[num] = 1
+            else:
+                seen[num] += 1
+        return count 
+            
+            

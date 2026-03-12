@@ -1,0 +1,74 @@
+######## Problem ########
+You are given an integer array nums and an integer k.
+In one operation, you can pick two numbers from the array whose sum equals k and remove them from the array.
+Return the maximum number of operations you can perform on the array.
+
+Example:
+Input: nums = [1,2,3,4], k = 5
+Output: 2
+Explanation: Starting with nums = [1,2,3,4]:
+- Remove numbers 1 and 4, then nums = [2,3]
+- Remove numbers 2 and 3, then nums = []
+There are no more pairs that sum up to 5, hence a total of 2 operations.
+
+###### Brute Force Solution #####
+Iterate throught the array twice. In each iteration check if the sum at index i and j 
+is k. if true increment the count and move on to the next value.
+so that you don't overcount assign the values already checked to negative 1.
+
+Since you are iterating through the array n * (n-1) times your time complexity O(n^2)
+
+python code:
+
+class Solution(object):
+    def maxOperations(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        count = 0
+        for i in range(len(nums)):
+            for j in range(i+1,len(nums)):
+                if nums[i] + nums[j] == k:
+                    count += 1
+                    nums[i] = -1
+                    nums[j] = -1
+                    break
+        return count
+
+##### Two Pointer Solution #####
+Here we will try to optimize our solution.
+We can start by sorting the array so that every element is greater than its prev
+we can start the pointer at opposite ends. If the nums at i,j = k then we
+will move both our pointer inward. if the sum is greater than k then our pointer j 
+will decrement otherwise i will increment.
+
+The Time complexity of sorting is O(nlgn)
+The time complexity of the two pointer loop is O(n)
+
+class Solution(object):
+    def maxOperations(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        count = 0
+        i = 0
+        j = len(nums) - 1
+        nums = sorted(nums)
+        while i < j:
+            sum = nums[i] + nums[j]
+            if sum == k:
+                count += 1
+                i += 1
+                j -= 1
+            elif sum > k:
+                j -= 1
+            else:
+                i += 1
+
+        return count
+
+##### Complement + hashmap or set #####
